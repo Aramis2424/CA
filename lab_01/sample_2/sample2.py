@@ -50,7 +50,7 @@ def find_x0_xn(data, power, arg):
         Нахождение начального и конечного индекса в таблице (x0 и xn).
     '''
     index_x = 0
-    
+
     while arg > data[index_x][0]:
         index_x += 1
     index_x0 = index_x - power // 2 - 1
@@ -99,7 +99,7 @@ def polinom_n(x, y, node, arg):
             j += 1
         y += pol[0][i] * p
         i += 1
-    return y 
+    return y
 
 def hermite_interpolate(data, node, arg, coords_x):
     '''
@@ -150,7 +150,7 @@ def polynom_h(pol, node, arg):
             j += 1
         y += pol[0][i] * p
         i += 1
-    return y 
+    return y
 
 def main():
     data, coords_x, coords_y, count = parse_table()
@@ -176,16 +176,16 @@ def main():
             ay = coords_y[x0 : xn + 1]
             if len(ax):
                 my_root = polinom_n(ax, ay, n + 1, x)
-                print("   {}  |".format(round(my_root, 5)), end="") 
-            
+                print("   {}  |".format(round(my_root, 5)), end="")
+
             # # Полином Эрмита
             # pol = hermite_interpolate(data, n, x, coords_x)
             # my_root2 = polynom_h(pol, n, x)
-            # print("  {}  |".format(round(my_root2, 5)), end="\n") 
+            # print("  {}  |".format(round(my_root2, 5)), end="\n")
 
     print("\nОбратная инерполяция с помощью полинома Ньютона\n",
           "| n |  x  |  Корень  |")
-    for n in arr_n:  
+    for n in arr_n:
         print(" | {} |  {}  |".format(n, 0), end="")
         flag = False
         # Проверка на наличие данного аргумента в таблице
@@ -209,7 +209,7 @@ def main():
             ay = coords_y[x0 : xn + 1]
             if len(ax):
                 my_root = polinom_n(ax, ay, n + 1, 0)
-                print("  {} |".format(round(my_root, 5))) 
+                print("  {} |".format(round(my_root, 5)))
 
 if __name__ == "__main__":
     main()

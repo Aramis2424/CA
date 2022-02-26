@@ -1,6 +1,6 @@
 # Аппроксимация ф-и, восстановление ф-и по ее дискретному значению
 # Полином Ньютона
-# Нахождение корней этим способом. 
+# Нахождение корней этим способом.
 
 from math import cos, radians, ceil
 
@@ -30,8 +30,8 @@ def get_matr(tbl, n):
 def choose_dots(tbl, n, x):
     tbl_len = len(tbl[0])
     i_near = min(range(tbl_len), key = lambda i: abs(tbl[0][i] - x)) # index of nearest value
-    space_needed = ceil(n / 2) #amount of max space needed up or down if there is enough space 
-    
+    space_needed = ceil(n / 2) #amount of max space needed up or down if there is enough space
+
     if (i_near + space_needed + 1 > tbl_len): # if not enough dots bottomn
         i_end = tbl_len
         i_start = tbl_len - n
@@ -40,10 +40,10 @@ def choose_dots(tbl, n, x):
         i_end = n
     else:
         i_start = i_near - space_needed + 1
-        i_end = i_start + n        
+        i_end = i_start + n
 
     return [tbl[0][i_start:i_end], tbl[1][i_start:i_end]]
-    
+
 def interpolate(tbl, n, x):
     tbl = choose_dots(tbl, n + 1, x)
     matr = get_matr(tbl, n)
@@ -53,7 +53,7 @@ def interpolate(tbl, n, x):
         res += tmp * matr[i+1][0]
         tmp *= (x - matr[0][i])
     return res
-        
+
 
 x_beg = float(input("Input beginning value of x: "))
 x_step = float(input("Input step for x value: "))
