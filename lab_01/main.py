@@ -1,5 +1,6 @@
 
-
+#Считаем полином Ньютона, по заданному аргументу, точкам "разделенной разности"
+#и известным значениям "х"
 def inter_newton(x, val, tab_x, dots):
     sub_x = 1
     res = 0
@@ -16,6 +17,7 @@ def inter_newton(x, val, tab_x, dots):
 
     return res
 
+#Рекурсивно считаем разделенную разность
 def div_diff_count(dots, tab_x, tab_y):
     if (len(dots) == 1):
         #print(tab_y[dots[0]])
@@ -26,6 +28,8 @@ def div_diff_count(dots, tab_x, tab_y):
 
     return a1
 
+#Формируем массив точек, на основе которых нужно посчитать разделенную разность
+#Возвращаем массив, содержащий точки "разделенной разности", по которым считается полином Ньютона
 def div_diff_arr(dots, tab_x, tab_y):
     dd_arr = []
 
@@ -35,6 +39,8 @@ def div_diff_arr(dots, tab_x, tab_y):
 
     return dd_arr
 
+#Выбираем точки в таблицы, расположенные "вокруг" заданной точки
+#Возвращаем массив индексов таких точек
 def choose_dots(x, table_x, n):
     center = -1
     for i in range(len(table_x)):
@@ -87,16 +93,14 @@ def main():
 
     #x = float(input('Введите значение аргумента: '))
     x = 0.6
-    #конец инициализации
 
+    #Полином Ньютона
     dots = choose_dots(x, table_x, n)
     #print(dots)
-
     values = div_diff_arr(dots, table_x, table_y)
     #print(values)
-
     res = inter_newton(x, values, table_x, dots)
-    print(round(res, 3))
+    print(f'Значение функции в {x} по полиному Ньютона:', round(res, 3))
 
 
 if __name__ == "__main__":
