@@ -37,7 +37,7 @@ def input_x():
     flag = 0
     x = 0
     while flag == 0:
-        x = input(float)
+        x = 1.5
         try:
             val = float(x)
             flag = 1
@@ -159,7 +159,7 @@ def main():
     # arr_n = [0, 1, 2, 3, 4]
 
     print("\nИнтерполяция с помощью полинома Ньютона и Эрмита\n",
-          "| n |   x | п. Ньютона |")# п. Эрмита |")
+          "| n |   x | п. Ньютона | п. Эрмита |")
     for n in arr_n:
         print(" | {} | {} |".format(n, x), end="")
         flag = False
@@ -179,9 +179,9 @@ def main():
                 print("   {}  |".format(round(my_root, 5)), end="")
 
             # # Полином Эрмита
-            # pol = hermite_interpolate(data, n, x, coords_x)
-            # my_root2 = polynom_h(pol, n, x)
-            # print("  {}  |".format(round(my_root2, 5)), end="\n")
+            pol = hermite_interpolate(data, n, x, coords_x)
+            my_root2 = polynom_h(pol, n, x)
+            print("  {}  |".format(round(my_root2, 5)), end="\n")
 
     print("\nОбратная инерполяция с помощью полинома Ньютона\n",
           "| n |  x  |  Корень  |")
