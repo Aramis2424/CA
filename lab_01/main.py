@@ -1,11 +1,11 @@
-
+#Копирование каждого элемента массива 1 раз: [1, 2] -> [1, 1, 2, 2]
 def dup_arr(arr):
     i = 0
     while i < len(arr):
         arr.insert(i+1, arr[i])
         i += 2
 
-#Считаем полином Ньютона, по заданному аргументу, точкам "разделенной разности"
+#Считаем полином, по заданному аргументу, точкам "разделенной разности"
 #и известным значениям "х"
 def inter_newton(x, val, tab_x, dots):
     sub_x = 1
@@ -109,25 +109,14 @@ def main():
     #инициализация
     #table_x = [ -0.50, -0.25, 0.0, 0.25, 0.50, 0.75, 1.0 ]
     #table_y = [ 0.707, 0.924, 1.0, 0.924, 0.707, 0.383, 0 ]
-
     table_x = [ 0.0, 0.15, 0.30, 0.45, 0.60, 0.75, 0.90, 1.05 ]
     table_y = [ 1.000000, 0.838771, 0.655336, 0.450447, 0.225336, -0.018310, -0.278390, -0.552430 ]
     table_y1 = [ -1.000000, -1.14944, -1.29552, -1.43497, -1.56464, -1.68164, -1.78333, -1.86742 ]
 
-    #n = int(input('Введите степень полинома Ньютона: '))
-    n = 2
-    #тут еще Эрмит
-
-    #x = float(input('Введите значение аргумента: '))
-    x = 0.525
-
-    #Полином Ньютона
-    dots = choose_dots(x, table_x, n)
-    #print(dots)
-    values = div_diff_arr(dots, table_x, table_y)
-    #print(values)
-    res = inter_newton(x, values, table_x, dots)
-    print(f'Значение функции в {x} по полиному Ньютона:', round(res, 3))
+    nn = int(input('Введите степень полинома Ньютона: '))
+    kk = int(input('Введите кол-во узлов полинома Эрмита: '))
+    x = float(input('Введите значение аргумента: '))
+    #x = 0.525
 
     #Обратная интерполяция
     y = 0
@@ -137,20 +126,45 @@ def main():
     res = inter_newton(y, values, table_y, dots)
     print('Корень заданной функции по обратной интерполяции:', round(res, 3))
 
+    #Полином Ньютона
+    newton = []
+    for i in range(1, 6):
+        n = i
+        dots = choose_dots(x, table_x, n)
+        #print(dots)
+        values = div_diff_arr(dots, table_x, table_y)
+        #print(values)
+        res = inter_newton(x, values, table_x, dots)
+        if n == nn:
+            print(f'Значение функции в {x} по полиному Ньютона:', round(res, 3))
+        newton.append(res)
+
     #Полином Эрмита
     dup_arr(table_x)
     dup_arr(table_y)
     dup_arr(table_y1)
+    ermit = []
+    for i in range(1, 4):
+        k = i
+        dots = choose_dots(x, table_x, n)
+        #print(dots)
+        values = div_diff_arr_ermit(dots, table_x, table_y, table_y1)
+        #print(values)
+        res = inter_newton(x, values, table_x, dots)
+        if k == kk:
+            print(f'Значение функции в {x} по полиному Эрмита:', round(res, 3))
+        ermit.append(res)
 
-    dots = choose_dots(x, table_x, n)
-    #print(dots)
-    values = div_diff_arr_ermit(dots, table_x, table_y, table_y1)
-    #print(values)
-    res = inter_newton(x, values, table_x, dots)
-    print(f'Значение функции в {x} по полиному Эрмита:', round(res, 3))
-
-
-
+    #Печать таблцы
+    print('\n', 54 * '-', sep='')
+    print('|{:^10}|{:^20}|{:^20}|'.format('n', 'Ньютон', 'Эрмит'))
+    print(54 * '-')
+    for i in range(5):
+        if i < 3:
+            print('|{:^10}|{:^20.3f}|{:^20.3f}|'.format(i+1, newton[i], ermit[i]))
+        else:
+            print('|{:^10}|{:^20.3f}|{:^20}|'.format(i+1, newton[i], '-'))
+        print(54 * '-')
 
 if __name__ == "__main__":
     main()
