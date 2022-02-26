@@ -24,7 +24,7 @@ def div_diff_count(dots, tab_x, tab_y):
         return tab_y[dots[0]]
 
     a1 = ((div_diff_count(dots[:len(dots) - 1], tab_x, tab_y) - div_diff_count(dots[1:], tab_x, tab_y)) /
-            (tab_x[dots[0]] - tab_x[dots[len(dots) - 1]]))
+        (tab_x[dots[0]] - tab_x[dots[len(dots) - 1]]))
 
     return a1
 
@@ -63,7 +63,6 @@ def choose_dots(x, table_x, n):
             n_copy -= 1
             if n_copy < 0:
                 break
-
         if center + ir < len(table_x):
             l.append(center + ir)
             n_copy -= 1
@@ -74,9 +73,6 @@ def choose_dots(x, table_x, n):
     l.sort()
 
     return l
-
-
-
 
 def main():
     #инициализация
@@ -101,6 +97,14 @@ def main():
     #print(values)
     res = inter_newton(x, values, table_x, dots)
     print(f'Значение функции в {x} по полиному Ньютона:', round(res, 3))
+
+    #Обратная интерполяция
+    y = 0
+    n = 3
+    dots = choose_dots(y, table_y, n)
+    values =div_diff_arr(dots, table_y, table_x)
+    res = inter_newton(y, values, table_y, dots)
+    print('Коронь заданной функции по обратной интерполяции:', res)
 
 
 if __name__ == "__main__":
