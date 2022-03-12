@@ -46,24 +46,42 @@ def div_diff_arr(dots, tab_x, tab_y):
 
 #Выбираем точки в таблицы, расположенные "вокруг" заданной точки
 #Возвращаем массив индексов таких точек
-def choose_dots(x, array, count):
-    i = 0
-    while i < len(array) and i < x:
-        i += 1
+def choose_dots(arg, table, n):
+    center = -1
+    for i in range(len(table)):
+        if arg - i <= 0:
+            center = i
+            break
 
-    if i < count // 2 + 1:
-        start, end = 0, count + 1
-    elif i > len(array) - count:
-        start, end = len(array) - count - 1, len(array)
-    else:
-        start = i - count // 2 - 1 if x != array[i] or count % 2 == 1 else i - count // 2
-        end = i + count // 2 + 1 if count % 2 == 1 or x == array[i] else i + count // 2
+    if center < 0:
+        print('Точка за пределами таблицы')
 
-    dots = [i for i in range(start, end)]
-    return dots
+    l = [center]
+    n_copy = n - 1
+    il = 1
+    ir = 1
+
+    while n_copy >= 0:
+
+        if center - il >= 0:
+            l.append(center - il)
+            n_copy -= 1
+            if n_copy < 0:
+                break
+        if center + ir < len(table):
+            l.append(center + ir)
+            n_copy -= 1
+
+        il += 1
+        ir += 1
+
+    l.sort()
+
+    return l
+
 
 def main():
-    '''Инициализация'''
+    #инициализация
     n = 5
     matr = []
     arr_x = []
@@ -78,11 +96,10 @@ def main():
         matr_xy_copy = matr_xy.copy()
         matr.append(matr_xy_copy)
         matr_xy.clear()
-    #print(matr)
 
     #n_x = int(input('Введите степень полинома Ньютона для x: '))
     #x = float(input('Введите значение x: '))
-    x = 3.5
+    x = 0.5
     n_x = 3
     #n_y = int(input('Введите степень полинома Ньютона для y: '))
     #y = float(input('Введите значение y: '))
@@ -92,46 +109,28 @@ def main():
     #z = float(input('Введите значение z: '))
     z = 3.5
     n_z = 3
+##    print(matr[2][3][4])
+##    return 0
 
+##    table_x = [  0, 1, 2, 3, 4 ]
+##    table_y = [  0, 1, 2, 3, 4 ]
 
+    #nn = int(input('Введите степень полинома Ньютона: '))
+    nn = 2
+    #x = float(input('Введите значение аргумента: '))
+    x = 0.5
 
-    '''Интерполяция'''
-    #Соседние точки
+    #Интерполяция
     dots_z = choose_dots(z, matr, n_z)
     dots_y = choose_dots(y, matr, n_y)
-    dots_x = choose_dots(x, matr, n_z)
-
-    kvazi_x = dots_x.copy()
-    y_inter_tab = []
-    z_inter_tab = []
-
-    #Двумерная интерполяция
-    for i in range(dots_z[0], dots_z[-1]+1):
-        for j in range(dots_y[0], dots_y[-1]+1):
-            kvazi_y = matr[i][j][dots_z[0]:dots_z[-1]+1]
-            print(kvazi_x, kvazi_y)
-            kvazi_dots = [i for i in kvazi_y]
-            values = div_diff_arr(kvazi_dots, kvazi_x, kvazi_y)
-            y_inter = inter_newton(x, values, kvazi_x, dots_x)
-            y_inter_tab += [y_inter]
-            #print(y_inter_tab)
-        kvazi_x2 = dots_y.copy()
-        kvazi_y2 = y_inter_tab.copy()
-        kvazi_dots1 = [i for i in range(len(y_inter_tab))]
-        values = div_diff_arr(kvazi_dots1, kvazi_x2, kvazi_y2)
-        z_inter = inter_newton(y, values, kvazi_x2, dots_x)
-        z_inter_tab += [z_inter]
-        #print(z_inter_tab)
-        y_inter_tab.clear()
-
-    #Трехмерная интерполяция
-    kvazi_x3 = dots_z.copy()
-    kvazi_y3 = z_inter_tab.copy()
-    kvazi_dots3 = [i for i in range(len(z_inter_tab))]
-    values = div_diff_arr(kvazi_dots3, kvazi_x3, kvazi_y3)
-    res = inter_newton(z, values, kvazi_x3, dots_x)
-
-    print(f'Значение функции u = f{x, y, z} =', round(res, 3))
+    dots_x = choose_dots(x, matr, n_x)
+    print(dots_z)
+    print(dots_y)
+    print(dots_x)
+    ##values = div_diff_arr(dots, table_x, table_y)
+    #print(values)
+    ##res = inter_newton(x, values, table_x, dots)
+    ##print(f'Значение функции в {x} по полиному Ньютона:', round(res, 3))
 
 if __name__ == "__main__":
     main()
