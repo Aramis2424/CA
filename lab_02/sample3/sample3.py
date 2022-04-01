@@ -52,6 +52,7 @@ def Newton_interpolation(tableNewton, x):
         j += 1
 
     polStr = Newton_polynomial(tableNewton)
+    #print(polStr)
     pol = ne.evaluate(polStr)
 
     # возвращает таблицу значений полинома, строку-полином, итоговое значение y для введенного x
