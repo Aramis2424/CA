@@ -99,12 +99,12 @@ def interpolate_1(func_tab, arg):
     n = len(func_tab)
 
     # индекс ближайшего к аргументу элемента
-    i_near = min(range(n), key = lambda i: abs(func_tab[i][0] - arg))
-    #print(i_near)
+    i_elem = min(range(n), key = lambda i: abs(func_tab[i][0] - arg))
+    #print(i_elem)
 
     # h = x_i_ - x_i-1_
     h = [0 if not i else func_tab[i][0] - func_tab[i - 1][0]\
-        for i in range(n)] # step value
+        for i in range(n)]
 
     # для вычисления c_i_
     A = [0 if i < 2 else h[i-1] for i in range(n)]
@@ -116,29 +116,29 @@ def interpolate_1(func_tab, arg):
 
     # прямой ход
     ksi = [0 for i in range(n + 1)]
-    eta = [0 for i in range(n + 1)]
+    nude = [0 for i in range(n + 1)]
     for i in range(2, n):
         ksi[i + 1] = D[i] / (B[i] - A[i] * ksi[i])
-        eta[i + 1] = (A[i] * eta[i] + F[i]) / (B[i] - A[i] * ksi[i])
+        nude[i + 1] = (A[i] * nude[i] + F[i]) / (B[i] - A[i] * ksi[i])
 
     # обратный ход
     c = [0 for i in range(n + 1)]
     for i in range(n - 2, -1, -1):
-        c[i] = ksi[i + 1] * c[i + 1] + eta[i + 1]
+        c[i] = ksi[i + 1] * c[i + 1] + nude[i + 1]
 
     a = [0 if i < 1 else func_tab[i-1][1] for i in range(n)]
     b = [0 if i < 1 else (func_tab[i][1] - func_tab[i - 1][1]) / h[i] - h[i] /\
         3 * (c[i + 1] + 2 * c[i]) for i in range(n)]
     d = [0 if i < 1 else (c[i + 1] - c[i]) / (3 * h[i]) for i in range(n)]
 
-    return a[i_near] + b[i_near] * (arg - func_tab[i_near - 1][0]) +\
-           c[i_near] * ((arg - func_tab[i_near - 1][0]) ** 2) +\
-           d[i_near] * ((arg - func_tab[i_near - 1][0]) ** 3)
+    return a[i_elem] + b[i_elem] * (arg - func_tab[i_elem - 1][0]) +\
+           c[i_elem] * ((arg - func_tab[i_elem - 1][0]) ** 2) +\
+           d[i_elem] * ((arg - func_tab[i_elem - 1][0]) ** 3)
 
 
 def main():
     ##arg = float(input('Введите x: '))
-    arg = 2.5
+    arg = 0.5
 
     #Интерполяция Ньютоном
     table_x = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
