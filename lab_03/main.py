@@ -1,8 +1,4 @@
-#Кубические сплайны
-
-
-from sympy import Symbol, diff
-
+import diff as mmm
 
 def inter_newton(x, val, tab_x, dots):
     sub_x = 1
@@ -95,74 +91,183 @@ def choose_dots(x, table_x, n):
     return l
 
 
-def interpolate_1(func_tab, arg):
-    n = len(func_tab)
+def read_table(f):
+    global x_arr, y_arr, count
+    size = int(f.readline())
+    count = size
+    for i in range(size):
+        tmp = f.readline().split()
+        x, y = float(tmp[0]), float(tmp[1])
+        x_arr.append(x)
+        y_arr.append(y)
 
-    # индекс ближайшего к аргументу элемента
-    i_elem = min(range(n), key = lambda i: abs(func_tab[i][0] - arg))
-    #print(i_elem)
+def find_x_index(x):
+    global x_arr, y_arr, count
+    find = 0
+    for i in range(0, count):
+        if x < x_arr[i]:
+            find = i
+            break
+    return find
 
-    # h = x_i_ - x_i-1_
-    h = [0 if not i else func_tab[i][0] - func_tab[i - 1][0]\
-        for i in range(n)]
+def interpolate_spline_normal(input_x):
+    global x_arr, y_arr, count
+    arr_a = [0] * 100
+    arr_b = [0] * 100
+    arr_d = [0] * 100
+    arr_C = [0] * 100
 
-    # для вычисления c_i_
-    A = [0 if i < 2 else h[i-1] for i in range(n)]
-    B = [0 if i < 2 else -2 * (h[i - 1] + h[i]) for i in range(n)]
-    D = [0 if i < 2 else h[i] for i in range(n)]
-    F = [0 if i < 2 else -3 * ((func_tab[i][1] - func_tab[i - 1][1]) /\
-        h[i] - (func_tab[i - 1][1] - func_tab[i - 2][1]) /\
-        h[i - 1]) for i in range(n)]
+    arr_tmp = [0] * 100
+    arr_F = [0] * 100
 
-    # прямой ход
-    ksi = [0 for i in range(n + 1)]
-    nude = [0 for i in range(n + 1)]
-    for i in range(2, n):
-        ksi[i + 1] = D[i] / (B[i] - A[i] * ksi[i])
-        nude[i + 1] = (A[i] * nude[i] + F[i]) / (B[i] - A[i] * ksi[i])
+    arr_K = [0] * 100
+    arr_E = [0] * 100
 
-    # обратный ход
-    c = [0 for i in range(n + 1)]
-    for i in range(n - 2, -1, -1):
-        c[i] = ksi[i + 1] * c[i + 1] + nude[i + 1]
+    arr_H = [0] * 100
 
-    a = [0 if i < 1 else func_tab[i-1][1] for i in range(n)]
-    b = [0 if i < 1 else (func_tab[i][1] - func_tab[i - 1][1]) / h[i] - h[i] /\
-        3 * (c[i + 1] + 2 * c[i]) for i in range(n)]
-    d = [0 if i < 1 else (c[i + 1] - c[i]) / (3 * h[i]) for i in range(n)]
+    for i in range(1, count):
+        arr_H[i] = x_arr[i] - x_arr[i - 1]
 
-    return a[i_elem] + b[i_elem] * (arg - func_tab[i_elem - 1][0]) +\
-           c[i_elem] * ((arg - func_tab[i_elem - 1][0]) ** 2) +\
-           d[i_elem] * ((arg - func_tab[i_elem - 1][0]) ** 3)
+    for i in range(2, count):
+        arr_tmp[i] = -2 * (arr_H[i - 1] + arr_H[i])
+
+        arr_F[i] = -3 * ((y_arr[i] - y_arr[i - 1]) / arr_H[i] - (y_arr[i] - y_arr[i - 2]) / arr_H[i - 1])
+
+        arr_K[i + 1] = arr_H[i] / (arr_tmp[i] - arr_H[i - 1] * arr_K[i])
+        arr_E[i + 1] = (arr_H[i - 1] * arr_E[i] + arr_F[i]) / (arr_tmp[i] - arr_H[i - 1] * arr_K[i])
+
+    for i in range(count - 2, 1, -1):
+        arr_C[i] = arr_K[i + 1] * arr_C[i + 1] + arr_E[i + 1]
+
+    for i in range(count - 1, 0, -1):
+        arr_a[i] = y_arr[i - 1]
+        arr_d[i] = (arr_C[i + 1] - arr_C[i]) / (3 * arr_H[i])
+        arr_b[i] = (y_arr[i] - y_arr[i - 1]) / arr_H[i] - arr_H[i] * (arr_C[i + 1] + 2 * arr_C[i]) / 3
+
+    x_i = find_x_index(input_x)
+
+    x = input_x - x_arr[x_i - 1]
+    x2 = x * x
+    x3 = x * x * x
+
+    result = arr_a[x_i] + arr_b[x_i] * x + arr_C[x_i] * x2 + arr_d[x_i] * x3
+    print("Сплайн (2.1) = {}".format(result))
+
+def interpolate_spline_first(input_x):
+    global x_arr, y_arr, count
+    c1 = mmm.mif(x_arr[0])
+    arr_a = [0] * 100
+    arr_b = [0] * 100
+    arr_d = [0] * 100
+    arr_C = [0] * 100
+
+    arr_tmp = [0] * 100
+    arr_F = [0] * 100
+
+    arr_K = [0] * 100
+    arr_E = [0] * 100
+
+    arr_H = [0] * 100
+    arr_C[1] = c1
+
+    for i in range(1, count):
+        arr_H[i] = x_arr[i] - x_arr[i - 1]
+
+    for i in range(2, count):
+        arr_tmp[i] = -2 * (arr_H[i - 1] + arr_H[i])
+
+        arr_F[i] = -3 * ((y_arr[i] - y_arr[i - 1]) / arr_H[i] - (y_arr[i] - y_arr[i - 2]) / arr_H[i - 1])
+
+        arr_K[i + 1] = arr_H[i] / (arr_tmp[i] - arr_H[i - 1] * arr_K[i])
+        arr_E[i + 1] = (arr_H[i - 1] * arr_E[i] + arr_F[i]) / (arr_tmp[i] - arr_H[i - 1] * arr_K[i])
+
+    for i in range(count - 2, 1, -1):
+        arr_C[i] = arr_K[i + 1] * arr_C[i + 1] + arr_E[i + 1]
+
+    for i in range(count - 1, 0, -1):
+        arr_a[i] = y_arr[i - 1]
+        arr_d[i] = (arr_C[i + 1] - arr_C[i]) / (3 * arr_H[i])
+        arr_b[i] = (y_arr[i] - y_arr[i - 1]) / arr_H[i] - arr_H[i] * (arr_C[i + 1] + 2 * arr_C[i]) / 3
+
+    x_i = find_x_index(input_x)
+
+    x = input_x - x_arr[x_i - 1]
+    x2 = x * x
+    x3 = x * x * x
+
+    result = arr_a[x_i] + arr_b[x_i] * x + arr_C[x_i] *\
+         x2 + arr_d[x_i] * x3
+    print("Сплайн (2.2) = {}".format(result))
+
+def interpolate_spline_both(input_x):
+    global x_arr, y_arr, count
+    c1 = mmm.mif(x_arr[0])
+    c2 = mmm.mif(x_arr[-1])
+    arr_a = [0] * 100
+    arr_b = [0] * 100
+    arr_d = [0] * 100
+    arr_C = [0] * 100
+
+    arr_tmp = [0] * 100
+    arr_F = [0] * 100
+
+    arr_K = [0] * 100
+    arr_E = [0] * 100
+    arr_H = [0] * 100
+    arr_C[1] = c1
+    arr_C[count] = c2
+    for i in range(1, count):
+        arr_H[i] = x_arr[i] - x_arr[i - 1]
+
+    for i in range(2, count):
+        arr_tmp[i] = -2 * (arr_H[i - 1] + arr_H[i])
+
+        arr_F[i] = -3 * ((y_arr[i] - y_arr[i - 1]) /\
+             arr_H[i] - (y_arr[i] - y_arr[i - 2]) / arr_H[i - 1])
+
+        arr_K[i + 1] = arr_H[i] / (arr_tmp[i] - arr_H[i - 1] * arr_K[i])
+        arr_E[i + 1] = (arr_H[i - 1] * arr_E[i] + arr_F[i]) /\
+             (arr_tmp[i] - arr_H[i - 1] * arr_K[i])
+
+    for i in range(count - 2, 1, -1):
+        arr_C[i] = arr_K[i + 1] * arr_C[i + 1] + arr_E[i + 1]
+
+    for i in range(count - 1, 0, -1):
+        arr_a[i] = y_arr[i - 1]
+        arr_b[i] = (y_arr[i] - y_arr[i - 1]) /\
+            arr_H[i] - arr_H[i] * (arr_C[i + 1] + 2 * arr_C[i]) / 3
+        arr_d[i] = (arr_C[i + 1] - arr_C[i]) / (3 * arr_H[i])
 
 
-def main():
-    ##arg = float(input('Введите x: '))
-    arg = 0.5
+    x_i = find_x_index(input_x)
 
-    #Интерполяция Ньютоном
-    table_x = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
-    table_y = [ 0, 0.496, 0.986, 1.102,  0.972, 0.754,\
-                0.539, 0.364, 0.236, 0.148, 0.091]
-    n = 3
+    x = input_x - x_arr[x_i - 1]
+    x2 = x * x
+    x3 = x * x * x
 
-    dots = choose_dots(arg, table_x, n)
-    values = div_diff_arr(dots, table_x, table_y)
-    res_newton, pol_newton = inter_newton(arg, values, table_x, dots)
-    res_newton = round(res_newton, 3)
-
-    #Интерполяция спалйнами
-    func_table = [[0, 0], [1, 0.496], [2, 0.986], [3, 1.102], [4, 0.972],\
-                  [5, 0.754], [6, 0.539], [7, 0.364], [8, 0.236], [9, 0.148],\
-                  [10, 0.091]]
-
-    f_arg = round(interpolate_1(func_table, arg), 3)
-
-    #Результаты
-    print(pol_newton)
-    print(f"Сплайны: f(x) в точке {arg}: ", f_arg)
-    print(f"Ньютон:  f(x) в точке {arg}: ", res_newton)
+    result = arr_a[x_i] + arr_b[x_i] * x + arr_C[x_i] *\
+        x2 + arr_d[x_i] * x3
+    print("Сплайн (2.3) = {}".format(result))
 
 
 if __name__ == '__main__':
-    main()
+    f = open("table.txt", "r")
+    x_arr = []
+    y_arr = []
+    count = 0
+    read_table(f)
+    f.close()
+
+    arg = 5.5 ###################
+
+    dots = choose_dots(arg, x_arr, 3)
+    values = div_diff_arr(dots, x_arr, y_arr)
+    res_newton, pol_newton = inter_newton(arg, values, x_arr, dots)
+    res_newton = round(res_newton, 7)
+    print(f'Значение f({arg}):')
+    print('Ньютон: ', res_newton)
+
+    interpolate_spline_normal(arg)
+    interpolate_spline_first(arg)
+    interpolate_spline_both(arg)
+    #print(mmm.mif(x_arr[0]))
