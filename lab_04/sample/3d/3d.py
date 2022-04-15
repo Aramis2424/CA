@@ -144,7 +144,7 @@ def add_table(table, label):
 def draw_result():
     plt.legend()
 
-    plt.xlabel('X') 
+    plt.xlabel('X')
     plt.ylabel('Y')
     plt.ylabel('Z')
 
