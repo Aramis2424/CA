@@ -53,9 +53,9 @@ def find_slae_matrix(dots, degree):
     matrix = [[get_coef(dots, j + i)  # получится degree * 2
               for i in range(degree + 1)]
               for j in range(degree + 1)]
-    print(matrix)
+    #print(matrix)
     append_right_side(matrix, dots)
-    print('\n',matrix)
+    #print('\n',matrix)
     return matrix
 
 
@@ -108,9 +108,8 @@ def add_table(table, label, n):  # Рисуем точки на графики �
     plt.plot(table_x, table_y, 'o', label=label)
 
 
+# 8 dots
 def main():
-    filename = 'input.txt'
-
     degrees = [1, 2, 7] # Ввод степеней различных полиномов
 
     for k in range(1, 3): # Делаем для двух файлов
@@ -130,32 +129,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-##    filenames = input("Enter filenames: ").split()
-##    label = input("Enter labels: ").split(',')
-
-##    degrees = list(map(int, input("Enter polynomial degree: ").split()))
-
-##    for i in range(1, 3):
-##        filename = f'input{i}.txt'
-##        points = read_from_file(filename)
-##        add_table(points, "Table", i)
-##        print_table(points)
-##        for i in range(len(degrees)):
-##            slae_matrix = find_slae_matrix(points, degrees[i])
-##            coeffs = get_polynomial_coefficients(slae_matrix)
-##            add_plot(coeffs, f"n = {degrees[i]}",
-##                     points[0].x, points[-1].x, i)
-##
-##
-##def print_arr(arr):
-##    for elem in arr:
-##        print(round(elem, 3), end = '  ')
-##    print()

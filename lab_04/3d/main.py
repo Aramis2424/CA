@@ -64,6 +64,8 @@ def method_gauss(matrix):
     n = len(matrix)
     for k in range(n):
         for i in range(k + 1, n):
+            if matrix[k][k] == 0:
+                continue
             coeff = -(matrix[i][k] / matrix[k][k])
             for j in range(k, n + 1):
                 matrix[i][j] += coeff * matrix[k][j]
@@ -71,6 +73,8 @@ def method_gauss(matrix):
     for i in range(n - 1, -1, -1):
         for j in range(n - 1, i, -1):
             matrix[i][n] -= a[j] * matrix[i][j]
+        if matrix[i][i] == 0:
+            continue
         a[i] = matrix[i][n] / matrix[i][i]
     return a
 
@@ -114,9 +118,10 @@ def draw_plot(coeffs, degree, points, n):
     plt.grid()
 
 
+# 7 dots
 def main():
     deg_arr = [1, 2]
-    filename = 'input1.txt'
+    filename = 'input3.txt'
 
     points = read_dots(filename)
     print_table(points)
@@ -126,6 +131,7 @@ def main():
 
         slae_matrix = find_slae_matrix_3d(points, degree)
         coeffs = method_gauss(slae_matrix)
+        print(coeffs)
 
         draw_plot(coeffs, degree, points, i+1)
     plt.show()
