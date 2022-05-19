@@ -1,7 +1,5 @@
-from math import cos, sin, pi, exp, sqrt
+from math import sqrt
 from numpy.polynomial.legendre import leggauss
-from numpy import arange
-import matplotlib.pyplot as plt
 
 
 # Функция f(t) - степень черноты полупрозрачного однородного по объему цилиндра
@@ -35,6 +33,7 @@ def simpson(func, a, b, degree):
     result *= h / 3
     return result
 
+
 # Метод интегрирования, использующий формулу Гаусса
 def gauss(func, a, b, degree):
     args, coeffs = leggauss(degree)
@@ -58,18 +57,7 @@ def integrate_2_dims(f, limits, degrees, integrators):
     return integrators[0](internal_func, limits[0][0], limits[0][1], degrees[0])
 
 
-# Добавление информации о полученной функции на график
-def graph(integrate_func, start, end, step, label):
-    x = []
-    y = []
-    for t in arange(start, end + step, step):
-        x.append(t)
-        y.append(integrate_func())
-    plt.plot(x, y, label=label)
-
-
 def main():
-
 ##    N = int(input("Введите N для внешней функции: "))
 ##    M = int(input("Введите M для внутренней функции: "))
 ##
