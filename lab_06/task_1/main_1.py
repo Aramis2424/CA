@@ -22,8 +22,9 @@ def convert_t_to_x(t, a, b):
 
 # Метод интегрирования, использующий формулу Симпсона
 def simpson(func, a, b, degree):
-    if degree < 3 or not degree % 2:
-        raise ValueError
+    if degree < 3 or degree % 2 == 0:
+        print("Неверные данные для Симпсона")
+        exit(-1)
     h = (b - a) / (degree - 1)
     x = a
     result = 0
@@ -68,8 +69,8 @@ def main():
 ##    internal_method = gauss if (int(input("Внутренняя функция:\n1) Функция Гаусса\n"
 ##                      "2) Функция Симпсона\nВаш выбор: ")) == 1) else simpson
 
-    N = 15
-    M = 15
+    N = 14
+    M = 14
     external_method = gauss
     internal_method = simpson
 
