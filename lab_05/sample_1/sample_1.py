@@ -86,7 +86,7 @@ def d_run_coefs(y, a, b, c, d, h):
     b1.append(b_coef)
     c_coef = kip * y[0] + kip * y[1] + c[0]
     c1.append(c_coef)
-    d_coef = -b[0] * y[0] + c[0] * y[1] + d[0] 
+    d_coef = -b[0] * y[0] + c[0] * y[1] + d[0]
     d1.append(d_coef)
 
     for i in range(1, len(y) - 1):
@@ -99,7 +99,7 @@ def d_run_coefs(y, a, b, c, d, h):
         b1.append(b_coef)
         c_coef = kip * y[i] + kip * y[i + 1] + c[i]
         c1.append(c_coef)
-        d_coef = a[i] * y[i - 1] - b[i] * y[i] + c[i] * y[i + 1] + d[i] 
+        d_coef = a[i] * y[i - 1] - b[i] * y[i] + c[i] * y[i + 1] + d[i]
         d1.append(d_coef)
 
     kim = dk_func(y[-1 - 1]) / 2
@@ -110,7 +110,7 @@ def d_run_coefs(y, a, b, c, d, h):
     b1.append(b_coef)
     c_coef = 0
     c1.append(c_coef)
-    d_coef = a[-1] * y[-2] - b[-1] * y[-1] + d[-1] 
+    d_coef = a[-1] * y[-2] - b[-1] * y[-1] + d[-1]
     d1.append(d_coef)
     return a1, b1, c1, d1
 

@@ -96,20 +96,39 @@ def show(N, h, a0, F0, T):
     for i in range(1, N + 1):
         x[i] = x[i - 1] + h
     fig, ax = plt.subplots()
-    text = "N=" + str(N) + ", F0=" + str(F0) + ", a0=" + str(a0) + ", EPS=" + str(EPS)
-    plt.title(text)
-    ax.plot(x, T, '-')
-    ax.set_xlabel('Расстояние от левого торца стержня, см')
-    ax.set_ylabel('Температура, К')
+    #text = "N=" + str(N) + ", F0=" + str(F0) + ", a0=" + str(a0) + ", EPS=" + str(EPS)
+    #plt.title(text)
+    ax.plot(x, T, '-', color = 'r')
+    ax.set_xlabel('Расстояние')
+    ax.set_ylabel('Температура')
     ax.grid(True)
     plt.show()
 
 
 def main():
     L = 10
-    F0 = 50
+    F0 = 10
     a0 = 1.94 * 10 ** (-2)
     N = 100
+
+
+    a11 = 0.0134
+    b11 = 1
+    c11 = 4.35e-4
+    m11 = 1
+    alpha01 = 1.94e-2
+    sigma1 = 1.5e3
+    gamma1 = 0.2e-2
+    L1 = 10
+    t01 = 300
+    r1 = 0.5
+    f01 = 50
+
+    #n = int(input('Введите кол-во участков: '))
+    n = 100
+
+    h = L/n # Длина каждого участка
+
 ##    print("1. Тест 1 - F0 = 50 (подача тепла)\n"
 ##          "2. Тест 2 - F0 = -10 (отвод тепла)\n"
 ##          "3. Тест 3 - a0 = 3*a0 (ускорение подачи тепла)\n"
