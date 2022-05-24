@@ -69,8 +69,8 @@ def main():
 ##    internal_method = gauss if (int(input("Внутренняя функция:\n1) Функция Гаусса\n"
 ##                      "2) Функция Симпсона\nВаш выбор: ")) == 1) else simpson
 
-    N = 14
-    M = 14
+    N = 101
+    M = 101
     external_method = gauss
     internal_method = simpson
 
