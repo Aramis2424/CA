@@ -79,7 +79,7 @@ def main():
     nSim = 51
     nG = 50
 
-    method = 0 # simpson - gauss = 0
+    method = 1 # simpson - gauss = 0
                # gauss - simpson = 1
 
     if method == 1:
