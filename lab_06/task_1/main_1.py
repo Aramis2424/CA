@@ -9,6 +9,10 @@ def f():
     return main_func
 
 
+def g_func(y):
+    return 1 - sqrt(1 - y * y), 1 + sqrt(1 - y * y)
+
+
 # Конвертация функции с двумя переменными в функцию с одной переменной
 #(вторая переменная считается константой)
 def to_single_temp(f, value):
