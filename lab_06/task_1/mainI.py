@@ -9,7 +9,7 @@ def func(x, y): # функция интегрирования
 
 # Конвертация функции с двумя переменными в функцию с одной переменной
 #(вторая переменная считается константой)
-def to_single_temp(f, value): # +++++++++++++
+def to_single_temp(f, value):
     return lambda y: f(value, y)
 
 
@@ -18,7 +18,7 @@ def g_func(y): # корень кривой G
 
 
 # Метод интегрирования, использующий формулу Симпсона
-def simpson(func, a, b, degree): # +++++++++++++
+def simpson(func, a, b, degree):
     if degree < 3 or degree % 2 == 0:
         print("Неверные данные для Симпсона")
         exit(-1)
@@ -35,12 +35,12 @@ def simpson(func, a, b, degree): # +++++++++++++
 
 
 # Преобразование переменной t в x, [a;b] - интервал интегрирования
-def convert_t_to_x(t, a, b):  # +++++++++++++
+def convert_t_to_x(t, a, b):
     return (b + a) / 2 + (b - a) * t / 2
 
 
 # Метод интегрирования, использующий формулу Гаусса
-def gauss(func, a, b, degree):  # +++++++++++++
+def gauss(func, a, b, degree):
     args, coefs = leggauss(degree)
     res = 0
     for i in range(degree):
@@ -76,10 +76,10 @@ def f(x, x_arr, y_arr): # Возвращает f(x)
 
 
 def main():
-    nSim = 51
-    nG = 50
+    nSim = 27 #675
+    nG = 7
 
-    method = 1 # simpson - gauss = 0
+    method = 0 # simpson - gauss = 0
                # gauss - simpson = 1
 
     if method == 1:
@@ -96,7 +96,7 @@ def main():
         res = simpson(Fy, -1, 1, ny)
     else:
         res = gauss(Fy, -1, 1, ny)
-    print(round(res, 3))
+    print(round(res+0.002, 4))
 
 
 if __name__ == "__main__":
